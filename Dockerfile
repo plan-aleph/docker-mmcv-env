@@ -2,6 +2,8 @@ ARG PYTORCH="1.10.0"
 
 FROM nvcr.io/nvidia/pytorch:${PYTORCH}-py3
 
+ENV DEBIAN_FRONTEND=noninteractive 
+
 RUN : \
     && apt-get update \
     && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 \
