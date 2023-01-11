@@ -1,40 +1,17 @@
-ARG CUDA_VERSION
-ARG FLAVOR="runtime"
-ARG SYS_VERSION
+ARG PYTORCH="1.10.0"
 
-FROM nvidia/cuda:${CUDA_VERSION}-${FLAVOR}-${SYS_VERSION}
+FROM nvcr.io/nvidia/pytorch:${PYTORCH}-py3
 
-ARG PYTHON_VERSION
-
-RUN apt update \
-    && apt upgrade -y \
-    && apt install -y --no-install-recommends \
-    wget \
-    build-essential \
-    libreadline-dev \ 
-    libncursesw5-dev \
-    libssl-dev \
-    libsqlite3-dev \
-    libgdbm-dev \
-    libbz2-dev \
-    liblzma-dev \
-    zlib1g-dev \
-    uuid-dev \
-    libffi-dev \
-    libdb-dev \
-    && wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz \
-    && tar -xvf Python-${PYTHON_VERSION}.tgz \
-    && cd Python-${PYTHON_VERSION} \
-    && ./configure \
-    && make -j 8 \
-    && make install \
-    && cd .. \
-    && rm -rf Python-${PYTHON_VERSION} \
-    && rm Python-${PYTHON_VERSION}.tgz \
-    && apt-get autoremove -y \
+RUN : \
+    && apt-get update \
+    && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && echo "install finished."
+    && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m venv /venv --system-site-packages
-ENV PATH=/venv/bin:$PATH
+ARG MMCV_NAME="mmcv-full"
+ARG MMCV_VERSION
+
+# Install MMCV
+RUN : \
+    && pip install --no-cache-dir -U openmim \
+    && mim install --no-cache-dir ${MMCV_NAME}==${MMCV_VERSION}
