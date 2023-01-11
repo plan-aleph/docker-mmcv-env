@@ -32,7 +32,7 @@ jobs:
     - name: Build and push Docker images
       uses: docker/build-push-action@v3.2.0
       with:
-        tags: misakiminato/test-mmcv:torch${{ matrix.pytorch_date }}-mmcv${{ matrix.mmcv_version }} 
+        tags: misakiminato/mmcv:torch${{ matrix.pytorch_date }}-mmcv${{ matrix.mmcv_version }} 
         push: true
         build-args: |
           PYTORCH=${{ matrix.pytorch_date }} 
